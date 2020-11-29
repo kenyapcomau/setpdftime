@@ -24,6 +24,8 @@ def processtimestamp(line, filename):
     if match:
         date_time = match.group(1)
         time_zone = match.group(2)
+        if time_zone == 'Z':
+            time_zone = '0'
         year = int(date_time[0:4])
         month = int(date_time[4:6])
         day = int(date_time[6:8])
@@ -56,7 +58,7 @@ def processfile(filename):
     print(f"No ModDate metadata found for {filename}")
 
 
-TIMESTAMP = re.compile(r"InfoValue: D:(\d{14})([-+]\d{2})")
+TIMESTAMP = re.compile(r"InfoValue: D:(\d{14})([-+]\d{2}|Z)")
 PARSER = argparse.ArgumentParser(
     description='Set PDF file modification time to ModDate value in metadata')
 PARSER.add_argument('filenames', metavar='file', nargs='+', help='PDF file')
